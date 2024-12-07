@@ -1,0 +1,105 @@
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a;
+    color: #ecf0f1; /* Light text color */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Title Styles */
+h1 {
+    color: #e74c3c; /* Red color for the title */
+    margin-bottom: 20px;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+/* Form Styles */
+form, #packingList {
+    background: #2c3e50; /* Dark gray-blue background for the form */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    width: 400px;
+    box-sizing: border-box; /* Ensures padding does not affect width */
+}
+
+/* Input, Select, Textarea, Button Styles */
+input, select, textarea, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #3498db; /* Blue border */
+    border-radius: 4px;
+    background-color: #34495e; /* Dark background for inputs */
+    color: #ecf0f1; /* Light text color */
+    box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+}
+
+/* Ensure input fields are not spilling out of the form */
+input, select, textarea {
+    box-sizing: border-box;
+}
+
+/* Focus States */
+input:focus, select:focus, textarea:focus, button:focus {
+    outline: none;
+    border-color: #e74c3c; /* Red focus border */
+}
+
+/* Button Styles */
+button {
+    margin-top: 15px;
+    background-color: #3498db; /* Blue button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 14px; /* Ensures button size matches inputs */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* Label Styles */
+label {
+    display: block;
+    margin-top: 10px;
+    color: #e74c3c; /* Red color for labels */
+}
+
+/* Packing List Styles (if any) */
+#packingList {
+    background: #2980b9; /* Blue background for packing list */
+    color: #ecf0f1;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Styling for each item in the list */
+#packingList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#packingList li {
+    background-color: #3498db; /* Light blue for list items */
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 4px;
+}
