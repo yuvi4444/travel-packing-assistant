@@ -1,0 +1,6 @@
+{
+    "cold": ["Warm Jacket", "Gloves", "Boots"],
+    "warm": ["Sunscreen", "Shorts", "Hat"],
+    "moderate": ["Light Jacket", "Comfortable Shoes"],
+    "essentials": ["Toiletries", "Phone Charger", "Passport"]
+}
