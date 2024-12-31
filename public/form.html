@@ -6,17 +6,27 @@
 </head>
 <body>
     <nav>
-        <a href="form.html">Add Packing Plan</a>
-        <a href="packing-list.html">View Packing List</a>
-        <a href="view-data.html">View All Data</a>
+        <div class="logo">Travel Assistant</div>
+        <ul>
+            <li><a href="form.html">Add Packing Plan</a></li>
+            <li><a href="packing-list.html">View Packing List</a></li>
+            <li><a href="view-data.html">View All Data</a></li>
+        </ul>
     </nav>
+    
     <h1>Travel Packing Assistant</h1>
     <form id="travelForm">
         <input type="text" name="destination" placeholder="Destination" required>
+
+        <!-- Location Picker Section -->
+        <div id="map" style="height: 400px; margin: 20px 0;"></div>
+        <input type="text" id="location" name="location" placeholder="Selected Location" readonly>
+        
         <input type="date" name="startDate" required>
         <input type="date" name="endDate" required>
         <button type="submit">Submit</button>
     </form>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfOEZ86nc_9yw8nzlx66ov0JO4JEwKiTU&callback=initMap&libraries=places" async defer></script>
     <script src="script.js"></script>
 </body>
 </html>
