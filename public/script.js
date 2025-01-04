@@ -60,6 +60,8 @@ document.getElementById('travelForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
 
+
+
     // Dynamic latitude and longitude
     const lat = selectedLat;
     const lon = selectedLon;
@@ -88,21 +90,33 @@ document.getElementById('travelForm')?.addEventListener('submit', async (e) => {
     }
 });
 
+function formatDate(dateString) {
+    return new Date(dateString).toISOString().split('T')[0]; // Extracts only the date part
+}
+
 // Fetch packing list
 if (window.location.pathname.includes('packing-list.html')) {
     fetch('/data')
         .then((res) => res.json())
         .then((data) => {
             const container = document.getElementById('packingList');
-            container.innerHTML = data.map(plan => `
-                <div>
-                    <h2>${plan.destination}</h2>
-                    <p>${plan.startDate} - ${plan.endDate}</p>
-                    <p>Packing List: ${plan.packingList}</p>
-                </div>
-            `).join('');
+            
+            container.innerHTML = data.map(plan => {
+                const formattedStartDate = formatDate(plan.startDate);
+                const formattedEndDate = formatDate(plan.endDate);
+                
+                // Generate HTML for each plan
+                return `
+                    <div>
+                        <h2>${plan.destination}</h2>
+                        <p>${formattedStartDate} - ${formattedEndDate}</p>
+                        <p>Packing List: ${plan.packingList}</p>
+                    </div>
+                `;
+            }).join('');
         });
 }
+
 
 // Fetch all data with delete functionality
 if (window.location.pathname.includes('view-data.html')) {
@@ -110,14 +124,27 @@ if (window.location.pathname.includes('view-data.html')) {
         .then((res) => res.json())
         .then((data) => {
             const container = document.getElementById('dataList');
-            container.innerHTML = data.map(plan => `
-                <div>
-                    <h2>${plan.destination}</h2>
-                    <p>${plan.startDate} - ${plan.endDate}</p>
-                    <p>Packing List: ${plan.packingList}</p>
-                    <button onclick="deleteRecord(${plan.id})">Delete</button>
-                </div>
-            `).join('');
+            if (!container) {
+                console.error('Container element not found');
+                return;
+            }
+            
+            container.innerHTML = data.map(plan => {
+                const formattedStartDate = formatDate(plan.startDate);
+                const formattedEndDate = formatDate(plan.endDate);
+                
+                return `
+                    <div>
+                        <h2>${plan.destination}</h2>
+                        <p>${formattedStartDate} - ${formattedEndDate}</p>
+                        <p>Packing List: ${plan.packingList}</p>
+                        <button onclick="deleteRecord(${plan.id})">Delete</button>
+                    </div>
+                `;
+            }).join('');
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
         });
 }
 
