@@ -7,6 +7,7 @@ const app = express();
 
 require('dotenv').config();
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const apiKey = process.env.WEATHER_API_KEY;
 
 app.use(express.static('public')); // Serve static files
 app.use(bodyParser.json()); // Parse JSON requests
@@ -21,6 +22,27 @@ app.get('/map-api', (req, res) => {
         .catch(error => res.status(500).send("Error fetching Google Maps API"));
 });
 
+app.get('/api/weather', async (req, res) => {
+    const { lat, lon } = req.query; // Expect latitude and longitude from the client
+    if (!lat || !lon) {
+        return res.status(400).json({ error: 'Latitude and longitude are required' });
+    }
+
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+
+    try {
+        const response = await fetch(weatherUrl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch weather data');
+        }
+        const data = await response.json();
+        res.json(data); // Send the weather data to the client
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+        res.status(500).json({ error: 'Failed to fetch weather data' });
+    }
+});
+
 // Generate a packing list based on destination and dates
 function generatePackingList(destination) {
     const baseItems = ['Clothes', 'Toiletries', 'Phone Charger', 'Passport'];
@@ -31,14 +53,25 @@ function generatePackingList(destination) {
 
 // Insert new data
 app.post('/submit', (req, res) => {
-    const { destination, startDate, endDate } = req.body;
-    const packingList = generatePackingList(destination).join(', ');
-    const query = 'INSERT INTO packingList (destination, startDate, endDate, packingList) VALUES (?, ?, ?, ?)';
-    db.query(query, [destination, startDate, endDate, packingList], (err) => {
-        if (err) return res.status(500).json({ error: 'Error inserting data' });
-        res.json({ message: 'Data inserted successfully', packingList });
-    });
+    const { destination, startDate, endDate, lat, lon, weather, temperature } = req.body;
+
+    // Generate packing list based on the destination and weather
+    const packingList = generatePackingList(destination, weather).join(', ');
+
+    // SQL query to insert the new data including additional fields
+    const query = `
+        INSERT INTO packingList (destination, startDate, endDate, lat, lon, weather, temperature, packingList)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    // Execute the query with the new fields
+    db.query(query, [destination, startDate, endDate, lat, lon, weather, temperature, packingList], (err) => {
+            if (err) return res.status(500).json({ error: 'Error inserting data' });
+            res.json({ message: 'Data inserted successfully', packingList });
+        }
+    );
 });
+
 
 // Retrieve all data
 app.get('/data', (req, res) => {
