@@ -22,7 +22,23 @@ function initMap() {
         geocoder.geocode({ location: latLng }, (results, status) => {
             if (status === "OK" && results[0]) {
                 selectedDestination = results[0].formatted_address; // Save the place name
-                console.log("Selected Destination:", selectedDestination); // Display in console
+                console.log("Selected address:", selectedDestination); // Display in console
+                // console.log("Destination:", results[0].address_components[2].long_name + ", " + results[0].address_components[3].long_name + ", " + results[0].address_components[4].long_name);
+                console.log("Suburb Destination:", results[0].address_components);
+
+                let locality =  "", area = "", state = "";
+                results[0].address_components.forEach(element => {
+                    if(element.types.includes("locality") || element.types.includes("locality")){
+                        locality = element.long_name;
+                    }
+                    if(element.types.includes("administrative_area_level_2")){
+                        area = element.long_name;
+                    }
+                    if(element.types.includes("administrative_area_level_1")){
+                        state = element.long_name;
+                    }
+                });
+                console.log("short address: " + locality + ", " + area + ", " + state);
                 alert(`Selected Destination: ${selectedDestination}`);
                 // fetchWeather(latLng.lat(), latLng.lng()); // Fetch weather for selected location
             } else {
@@ -54,13 +70,22 @@ async function fetchWeather(lat, lon) {
 }
 
 
-
 // Handle form submission
 document.getElementById('travelForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
 
-
+    // Convert string dates to Date objects for accurate comparison on multiple days
+    // var startDate = new Date(formData.startDate);
+    // var endDate = new Date(formData.endDate);
+    // if (startDate > endDate){
+    //     alert("Please enter valid date range!");
+    //     return;
+    // }
+    // else {
+    //     let days = (endDate-startDate)/(1000 * 60 * 60 * 24);
+    //     console.log("number of days: " + days);
+    // };
 
     // Dynamic latitude and longitude
     const lat = selectedLat;
