@@ -6,23 +6,16 @@
 </head>
 <body>
     <nav>
-        <div class="logo">Travel Assistant</div>
         <ul>
             <li><a href="form.html">Add Packing Plan</a></li>
             <li><a href="packing-list.html">View Packing List</a></li>
-            <li><a href="view-data.html">View All Data</a></li>
+            <li><a href="view-data.html">Edit lists</a></li>
         </ul>
     </nav>
     
     <h1>Travel Packing Assistant</h1>
-    <p>Note: Weather forecasts are available only for a reliable range (i.e. 5 days)</p>
-    <form id="travelForm">
-        <input type="text" name="destination" placeholder="List/Trip name" required>
-        <div id="map" style="height: 400px; margin: 20px 0;"></div>
-        <input type="date" name="startDate" required>
-        <input type="date" name="endDate" required>
-        <button type="submit">Submit</button>
-    </form>
+    <div id="map" style="height: 600px; margin: 20px 0;"></div>
+    <button type="button" id="submit">Submit</button>
     <script src="/map-api?query=initMap" async defer></script>
     <script src="script.js"></script>
 </body>

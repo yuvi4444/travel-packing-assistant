@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');   // built-in Node.js module used to work with file and directory paths
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const db = require('./db');
@@ -53,19 +54,19 @@ function generatePackingList(destination) {
 
 // Insert new data
 app.post('/submit', (req, res) => {
-    const { destination, startDate, endDate, lat, lon, weather, temperature } = req.body;
+    const { destination, travel_date, lat, lon, weather, temperature, logo_id } = req.body;
 
     // Generate packing list based on the destination and weather
     const packingList = generatePackingList(destination, weather).join(', ');
 
     // SQL query to insert the new data including additional fields
     const query = `
-        INSERT INTO packingList (destination, startDate, endDate, lat, lon, weather, temperature, packingList)
+        INSERT INTO packingList (destination, travel_date, lat, lon, weather, temperature, logo_id, packingList)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     // Execute the query with the new fields
-    db.query(query, [destination, startDate, endDate, lat, lon, weather, temperature, packingList], (err) => {
+    db.query(query, [destination, travel_date, lat, lon, weather, temperature, logo_id, packingList], (err) => {
             if (err) return res.status(500).json({ error: 'Error inserting data' });
             res.json({ message: 'Data inserted successfully', packingList });
         }
@@ -91,6 +92,9 @@ app.delete('/delete/:id', (req, res) => {
         res.json({ message: 'Data deleted successfully' });
     });
 });
+
+// Serve static files from the "data/images" folder, dirname provides complete path from home directory
+app.use('/data/images', express.static(path.join(__dirname, 'data/images')));
 
 const PORT = 3000;
 app.listen(PORT, () => {
